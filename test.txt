@@ -1,0 +1,7 @@
+Customer {
+    String name,
+    String address,
+    String phoneNumber,
+    String gstin,
+    Decimal outstandingbalance
+}
