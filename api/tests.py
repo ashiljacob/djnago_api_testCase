@@ -9,6 +9,16 @@ from .serializers import CustomerSerializer
 
 class PostCustomerTest(APITestCase):
 
+    @classmethod
+    def setUpTestData(cls):
+        cls.customer =Customer.objects.create(
+            name= "john",
+            address = "address",
+            phoneNumber = "2645662",
+            gstin = "26456",
+            outstandingbalance = 2356.26
+        )
+
     def test_post(self):
         data = {
             "name": "john",
@@ -24,7 +34,7 @@ class PostCustomerTest(APITestCase):
         response = self.client.get('/api',{},True)
         self.assertEquals(response.status_code,status.HTTP_200_OK)
 
-    def test_put(self,):
+    def test_put(self):
         data = {
             "name": "test",
             "address": "address",
@@ -40,6 +50,5 @@ class PostCustomerTest(APITestCase):
         self.assertEqual(response.status_code,status.HTTP_200_OK)
     
     def test_delete(self):
-        response = self.client.delete("api/1/")
-
-        self.assertEquals(response.status_code,status.HTTP_200_OK)
+        response = self.client.delete('api/1/')
+        self.assertEquals(response.status_code,status.HTTP_204_NO_CONTENT)
