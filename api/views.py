@@ -47,4 +47,4 @@ class CustomerView(APIView):
     def delete(self, request, pk, format=None):
         customer = self.get_object(pk)
         customer.delete()
-        return Response({'Status':True,'message':"Deleted Customer Successfully"},status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_204_NO_CONTENT)

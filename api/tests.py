@@ -48,7 +48,7 @@ class GetSinglePuppyTest(TestCase):
         
 
     def test_get_valid_single_customer(self):
-        print("Testing ::::::::")
+        print("Testing ::::::::",self.test.id)
 
         response = client.get(
             reverse('customer_put_delete', kwargs={'pk': self.test.id}))
@@ -60,7 +60,7 @@ class GetSinglePuppyTest(TestCase):
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_get_invalid_single_customer(self):
-        response = client.get(
-            reverse('customer_put_delete', kwargs={'pk': 10}))
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+    def test_valid_delete_customer(self):
+        response = client.delete(
+            reverse('customer_put_delete', kwargs={'pk': self.test.id}))
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
