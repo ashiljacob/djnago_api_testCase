@@ -1,66 +1,45 @@
 
 import json
-from rest_framework import status
-from django.test import TestCase, Client
 from django.urls import reverse
-
+from rest_framework.test import APITestCase
+from rest_framework import status
 from .models import Customer
 from .serializers import CustomerSerializer
 
-# initialize the APIClient app
-client = Client()
 
-# Create your tests here.
-class CustomerTest(TestCase):
+class PostCustomerTest(APITestCase):
 
-    def setUp(self):
-        Customer.objects.create(
-            name='test',
-            address = 'test',
-            phoneNumber = '9586963',
-            gstin = '25633',
-            outstandingbalance = 2536.56
-        )
-
-    def test_customer_api(self):
-    
-        # get API response
-        response = client.get(reverse('customer_get_post'))
-        # get data from db
-        customer = Customer.objects.all()
-        serializer = CustomerSerializer(customer, many=True)
-
-        self.assertEqual(response.data, serializer.data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-    
-
-class GetSinglePuppyTest(TestCase):
-    """ Test module for GET single Customer API """
-
-    def setUp(self):
-        self.test = Customer.objects.create(
-            name='test',
-            address = 'test',
-            phoneNumber = '9586963',
-            gstin = '25633',
-            outstandingbalance = 2536.56
-        )
+    def test_post(self):
+        data = {
+            "name": "john",
+            "address": "address",
+            "phoneNumber": "2645662",
+            "gstin": "26456",
+            "outstandingbalance": 2356.26 }
         
+        response = self.client.post("/api/",data)
+        self.assertEqual(response.status_code,status.HTTP_201_CREATED)
 
-    def test_get_valid_single_customer(self):
-        print("Testing ::::::::",self.test.id)
+    def test_get(self):
+        response = self.client.get('/api',{},True)
+        self.assertEquals(response.status_code,status.HTTP_200_OK)
 
-        response = client.get(
-            reverse('customer_put_delete', kwargs={'pk': self.test.id}))
+    def test_put(self,):
+        data = {
+            "name": "test",
+            "address": "address",
+            "phoneNumber": "2645662",
+            "gstin": "26456",
+            "outstandingbalance": .36
+            }
 
-        customer = Customer.objects.get(id=self.test.id)
-        print("Testing ::::::::",customer)
+        response = self.client.put("/api/1/",data)
+        serializer = CustomerSerializer(data)
+        print(response.status_code)
+        # self.assertEquals(response.data,serializer.data)
+        self.assertEqual(response.status_code,status.HTTP_200_OK)
+    
+    def test_delete(self):
+        response = self.client.delete("api/1/")
 
-        serializer = CustomerSerializer(customer)
-        self.assertEqual(response.data, serializer.data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_valid_delete_customer(self):
-        response = client.delete(
-            reverse('customer_put_delete', kwargs={'pk': self.test.id}))
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEquals(response.status_code,status.HTTP_200_OK)
