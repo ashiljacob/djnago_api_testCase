@@ -50,5 +50,7 @@ class PostCustomerTest(APITestCase):
         self.assertEqual(response.status_code,status.HTTP_200_OK)
     
     def test_delete(self):
-        response = self.client.delete('api/1/')
+        url = reverse('customer_put_delete',kwargs={'pk':1})
+        response = self.client.delete(url)
+        # print(Customer.objects.get(id=1))
         self.assertEquals(response.status_code,status.HTTP_204_NO_CONTENT)
